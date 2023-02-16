@@ -1,10 +1,7 @@
 package com.example.data_mining;
 import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayes;
-import weka.core.Attribute;
-import weka.core.DenseInstance;
-import weka.core.Instance;
-import weka.core.Instances;
+import weka.core.*;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.Remove;
@@ -18,16 +15,16 @@ public class DataMiningApplication {
 		//setting the prediction attribute, in this case is the type of animal
 		instances.setClassIndex(instances.numAttributes() - 1);
 		Remove remove = new Remove();
-		int[] ind = new int[]{};
+		int[] ind = new int[]{0};
 
 		remove.setAttributeIndicesArray(ind);
 		remove.setInputFormat(instances);
 		// creamos un filtro para remover los atributos no necesarios (cadenas de texto) y tenemos el nuevo dataset
 		Instances filter = Filter.useFilter(instances,remove);
 		//Creating a Dense instance - setting the values one by one of the new instances that we want to use the model with
-		Instance instance = new DenseInstance(18);
+		//Instance instance = new DenseInstance(18);
 		//setting the attributes
-		instance.setDataset(instances); // setting the data set for the new instance
+		//instance.setDataset(instances); // setting the data set for the new instance
 		/*instance.setValue(0, "aardvark");
 		instance.setValue(1, String.valueOf(true));
 		instance.setValue(2, String.valueOf(false));
@@ -47,29 +44,12 @@ public class DataMiningApplication {
 		instance.setValue(16, String.valueOf(false));
 		instance.setValue(17, 3);*/
 
-		instance.setValue(0, "bass");
-		instance.setValue(1, String.valueOf(false));
-		instance.setValue(2, String.valueOf(false));
-		instance.setValue(3, String.valueOf(false));
-		instance.setValue(4, String.valueOf(false));
-		instance.setValue(5, String.valueOf(false));
-		instance.setValue(6, String.valueOf(false));
-		instance.setValue(7, String.valueOf(false));
-		instance.setValue(8, String.valueOf(false));
-		instance.setValue(9, String.valueOf(false));
-		instance.setValue(10, String.valueOf(false));
-		instance.setValue(11, String.valueOf(false));
-		instance.setValue(12, String.valueOf(false));
-		instance.setValue(13, 0);
-		instance.setValue(14, String.valueOf(false));
-		instance.setValue(15, String.valueOf(false));
-		instance.setValue(16, String.valueOf(false));
-		instance.setValue(17, 0);
-		instance.setValue(14, String.valueOf(false));
-		instance.setValue(15, String.valueOf(false));
-		instance.setValue(16, String.valueOf(false));
-		instance.setValue(17, 0);
+		//ZooModel a1 = new ZooModel("bass", new double[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0});
+		ZooModel a1 = new ZooModel("aardvark", new double[]{1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 4, 1, 0, 0, 0});
+		Instance instance = new SparseInstance(1,a1.getAttributes());
+		instance.setDataset(instances);
 
+		//System.out.println(instance);
 		Instances test = filter;
 		test.add(instance);
 		NaiveBayes bayes = new NaiveBayes();
@@ -108,7 +88,7 @@ public class DataMiningApplication {
 			default:
 				animal = "Unknown";
 		}
-		System.out.println("The animal:"+ instance.stringValue(0)+ " is predicted to be a: "+animal +" prediction = "+ prediction);
+		System.out.println("The animal:"+ a1.getAnimal()+ " is predicted to be a: "+animal +" prediction = "+ prediction);
 
 	}
 
